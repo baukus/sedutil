@@ -148,7 +148,7 @@ void DtaDevOS::getDevStr(struct device_match_result *dev_result,
 		    sizeof(dev_result->ident_data.revision), sizeof(revision));
 		sprintf(tmpstr, "<%s %s>", product, revision);
 		break;
-#if (__FreeBSD_version >= 1200038)
+#if ((__FreeBSD_version >= 1200038) && (__FreeBSD_version < 1200056))
 	case PROTO_MMCSD:
 		if (strlen((char *)dev_result->mmc_ident_data.model) > 0) {
 			sprintf(tmpstr, "<%s>",
@@ -159,6 +159,52 @@ void DtaDevOS::getDevStr(struct device_match_result *dev_result,
 			    CARD_FEATURE_SDIO ? "SDIO" : "unknown");
 		}
 		break;
+#elif (__FreeBSD_version >= 1200056) /* This is an approximate version */
+	case PROTO_MMCSD: {
+		union ccb *ccb;
+		struct ccb_dev_advinfo *cdai;
+		struct mmc_params mmc_ident_data;
+		struct cam_device *dev;
+
+		dev = cam_open_btl(dev_result->path_id, dev_result->target_id,
+		    dev_result->target_lun, O_RDWR, NULL);
+		if (dev == NULL) {
+			sprintf(tmpstr, "<>");
+			break;
+		}
+
+		ccb = cam_getccb(dev);
+		if (ccb == NULL) {
+			cam_close_device(dev);
+			sprintf(tmpstr, "<>");
+			break;
+		}
+
+		memset(&mmc_ident_data, 0, sizeof(mmc_ident_data));
+		cdai = &ccb->cdai;
+		cdai->ccb_h.func_code = XPT_DEV_ADVINFO;
+		cdai->ccb_h.flags = CAM_DIR_IN;
+		cdai->flags = CDAI_FLAG_NONE;
+		cdai->buftype = CDAI_TYPE_MMC_PARAMS;
+		cdai->bufsiz = sizeof(mmc_ident_data);
+		cdai->buf = (uint8_t *)&mmc_ident_data;
+
+		if (cam_send_ccb(dev, ccb) < 0) {
+			cam_freeccb(ccb);
+			cam_close_device(dev);
+			sprintf(tmpstr, "<>");
+			break;
+		}
+		if (strlen((char *)mmc_ident_data.model) > 0)
+			sprintf(tmpstr, "<%s>", mmc_ident_data.model);
+		else
+			sprintf(tmpstr, "<%s card>",
+			    mmc_ident_data.card_features &
+			    CARD_FEATURE_SDIO ? "SDIO" : "unknown");
+		cam_freeccb(ccb);
+		cam_close_device(dev);
+		break;
+	}
 #endif
 	case PROTO_SEMB: {
 		struct sep_identify_data *sid;
@@ -432,7 +478,7 @@ bailout:
 	if (fd != -1)
 		close(fd);
 
-	return 0;
+	return retval;
 }
 
 /** Close the device reference so this object can be delete. */
