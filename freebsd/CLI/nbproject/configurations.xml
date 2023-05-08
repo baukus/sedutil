@@ -20,13 +20,17 @@
       <itemPath>../../Common/DtaDev.h</itemPath>
       <itemPath>../../Common/DtaDevEnterprise.h</itemPath>
       <itemPath>../DtaDevFreeBSDDrive.h</itemPath>
+      <itemPath>../DtaDevFreeBSDCAM.h</itemPath>
       <itemPath>../DtaDevFreeBSDNvme.h</itemPath>
-      <itemPath>../DtaDevFreeBSDSata.h</itemPath>
       <itemPath>../../Common/DtaDevGeneric.h</itemPath>
       <itemPath>../DtaDevOS.h</itemPath>
       <itemPath>../../Common/DtaDevOpal.h</itemPath>
       <itemPath>../../Common/DtaDevOpal1.h</itemPath>
       <itemPath>../../Common/DtaDevOpal2.h</itemPath>
+      <itemPath>../../Common/DtaDevOpalite.h</itemPath>
+      <itemPath>../../Common/DtaDevPyrite1.h</itemPath>
+      <itemPath>../../Common/DtaDevPyrite2.h</itemPath>
+      <itemPath>../../Common/DtaDevRuby1.h</itemPath>
       <itemPath>../../Common/DtaEndianFixup.h</itemPath>
       <itemPath>../../Common/DtaHashPwd.h</itemPath>
       <itemPath>../../Common/DtaHexDump.h</itemPath>
@@ -56,13 +60,17 @@
       <itemPath>../../Common/DtaCommand.cpp</itemPath>
       <itemPath>../../Common/DtaDev.cpp</itemPath>
       <itemPath>../../Common/DtaDevEnterprise.cpp</itemPath>
+      <itemPath>../DtaDevFreeBSDCAM.cpp</itemPath>
       <itemPath>../DtaDevFreeBSDNvme.cpp</itemPath>
-      <itemPath>../DtaDevFreeBSDSata.cpp</itemPath>
       <itemPath>../../Common/DtaDevGeneric.cpp</itemPath>
       <itemPath>../DtaDevOS.cpp</itemPath>
       <itemPath>../../Common/DtaDevOpal.cpp</itemPath>
       <itemPath>../../Common/DtaDevOpal1.cpp</itemPath>
       <itemPath>../../Common/DtaDevOpal2.cpp</itemPath>
+      <itemPath>../../Common/DtaDevOpalite.cpp</itemPath>
+      <itemPath>../../Common/DtaDevPyrite1.cpp</itemPath>
+      <itemPath>../../Common/DtaDevPyrite2.cpp</itemPath>
+      <itemPath>../../Common/DtaDevRuby1.cpp</itemPath>
       <itemPath>../../Common/DtaHashPwd.cpp</itemPath>
       <itemPath>../../Common/DtaHexDump.cpp</itemPath>
       <itemPath>../../Common/DtaOptions.cpp</itemPath>
@@ -179,6 +187,22 @@
       </item>
       <item path="../../Common/DtaDevOpal2.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../Common/DtaDevOpalite.cpp" ex="false" tool="1" flavor2="8">
+      </item>
+      <item path="../../Common/DtaDevOpalite.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Common/DtaDevPyrite1.cpp" ex="false" tool="1" flavor2="8">
+      </item>
+      <item path="../../Common/DtaDevPyrite1.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Common/DtaDevPyrite2.cpp" ex="false" tool="1" flavor2="8">
+      </item>
+      <item path="../../Common/DtaDevPyrite2.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Common/DtaDevRuby1.cpp" ex="false" tool="1" flavor2="8">
+      </item>
+      <item path="../../Common/DtaDevRuby1.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../Common/DtaEndianFixup.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../Common/DtaHashPwd.cpp" ex="false" tool="1" flavor2="8">
@@ -235,15 +259,15 @@
       </item>
       <item path="../../Common/sedutil.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="../DtaDevFreeBSDCAM.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DtaDevFreeBSDCAM.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DtaDevFreeBSDDrive.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../DtaDevFreeBSDNvme.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DtaDevFreeBSDNvme.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../DtaDevFreeBSDSata.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../DtaDevFreeBSDSata.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../DtaDevOS.cpp" ex="false" tool="1" flavor2="8">
       </item>

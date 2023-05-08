@@ -1,5 +1,5 @@
 /* C:B**************************************************************************
-This software is Copyright 2016 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
 This software is Copyright 2014-2016 Bright Plaza Inc. <drivetrust@drivetrust.com>
 
 This file is part of sedutil.
@@ -26,12 +26,12 @@ along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
  * Uses the SCSI generic ioctls to send commands to the 
  * device 
  */
-class DtaDevFreeBSDSata: public DtaDevFreeBSDDrive {
+class DtaDevFreeBSDCAM: public DtaDevFreeBSDDrive {
 public:
     /** Default constructor */
-    DtaDevFreeBSDSata();
+    DtaDevFreeBSDCAM();
     /** Destructor */
-    ~DtaDevFreeBSDSata();
+    ~DtaDevFreeBSDCAM();
     /** Sata FreeBSD specific initialization.
      * This function should perform the necessary authority and environment checking
      * to allow proper functioning of the program, open the device, perform an ATA

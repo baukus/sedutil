@@ -1,5 +1,5 @@
 /* C:B**************************************************************************
-This software is Copyright 2016 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
 
 This file is part of sedutil.
 
@@ -78,12 +78,19 @@ uint8_t DtaDevFreeBSDNvme::sendCmd(ATACOMMAND cmd, uint8_t protocol, uint16_t co
 	pt.buf = buffer;
 
 	err = ioctl(fd, NVME_PASSTHROUGH_CMD, &pt);
-	if (err < 0)
+	if (err < 0) {
+		LOG(D4) << "NVME_PASSTHROUGH_CMD failed";
 		return (errno);
-	else if (err != 0) {
-		fprintf(stderr, "NVME Security Command Error:%d\n", err);
+	} else if (nvme_completion_is_error(&pt.cpl)) {
+		LOG(D4) << "NVME Security Command Error: " << std::hex <<
+#if __FreeBSD_version >= 1200058
+		    pt.cpl.status;
+#else
+		    pt.cpl.status.sct << " " << pt.cpl.status.sc;
+#endif
+		return (0xff);
 	} else
-		LOG(D3) << "NVME Security Command Success";
+		LOG(D4) << "NVME Security Command Success";
 	return (err);
 }
 
@@ -91,6 +98,8 @@ void DtaDevFreeBSDNvme::identify(OPAL_DiskInfo& disk_info)
 {
 	struct nvme_pt_command	pt;
 	struct nvme_controller_data cdata;
+
+	LOG(D4) << "Entering DtaDevFreeBSDNvme::identify()";
 
 	memset(&pt, 0, sizeof(pt));
 #if __FreeBSD_version >= 1200058 && __FreeBSD_version < 1200081
@@ -115,10 +124,22 @@ void DtaDevFreeBSDNvme::identify(OPAL_DiskInfo& disk_info)
 		return;
 	}
 
-	disk_info.devType = DEVICE_TYPE_NVME;
 	memcpy(disk_info.serialNum, cdata.sn, sizeof (disk_info.serialNum));
 	memcpy(disk_info.firmwareRev, cdata.fr, sizeof(disk_info.firmwareRev));
 	memcpy(disk_info.modelNum, cdata.mn, sizeof(disk_info.modelNum));
+
+#if __FreeBSD_version >= 1200058
+	if ((cdata.oacs >> NVME_CTRLR_DATA_OACS_SECURITY_SHIFT) &
+	    NVME_CTRLR_DATA_OACS_SECURITY_MASK) {
+#else
+	if (cdata.oacs.security) {
+#endif
+		LOG(D4) << "Security Send/Receive are supported";
+		disk_info.devType = DEVICE_TYPE_NVME;
+	} else {
+		LOG(D4) << "Security Send/Receive are not supported";
+		disk_info.devType = DEVICE_TYPE_OTHER;
+	}
 }
 
 /** Close the device reference so this object can be delete. */

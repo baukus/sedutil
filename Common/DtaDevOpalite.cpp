@@ -1,5 +1,5 @@
 /* C:B**************************************************************************
-This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2014-2017 Bright Plaza Inc. <drivetrust@drivetrust.com>
 
 This file is part of sedutil.
 
@@ -17,19 +17,19 @@ You should have received a copy of the GNU General Public License
 along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
 
  * C:E********************************************************************** */
-#pragma once
-#include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <assert.h>
-#include "DtaConstants.h"
-#include "log.h"
-// Why can't I find these??
-#define TRUE 1
-#define FALSE 0
-// a few OS specific methods that need to be worked out
-#define SNPRINTF snprintf
-#define DEVICEMASK snprintf(devname,23,"/dev/da%d",i)
-#define DEVICEEXAMPLE "/dev/da0"
+
+#include "DtaDevOpalite.h"
+
+using namespace std;
+
+
+DtaDevOpalite::DtaDevOpalite (const char * devref)
+{
+	DtaDevOpal::init(devref);
+	assert(isOpalite());
+}
+
+DtaDevOpalite::~DtaDevOpalite()
+{
+}
+uint16_t DtaDevOpalite::comID() { return disk_info.Opalite_basecomID; }

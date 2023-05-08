@@ -1,5 +1,5 @@
 /* C:B**************************************************************************
-This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2014-2017 Bright Plaza Inc. <drivetrust@drivetrust.com>
 
 This file is part of sedutil.
 
@@ -18,18 +18,17 @@ along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
 
  * C:E********************************************************************** */
 #pragma once
-#include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <assert.h>
-#include "DtaConstants.h"
-#include "log.h"
-// Why can't I find these??
-#define TRUE 1
-#define FALSE 0
-// a few OS specific methods that need to be worked out
-#define SNPRINTF snprintf
-#define DEVICEMASK snprintf(devname,23,"/dev/da%d",i)
-#define DEVICEEXAMPLE "/dev/da0"
+#include "os.h"
+#include "DtaDevOpal.h"
+
+using namespace std;
+/** Class representing a disk device, this class is represents a disk that conforms
+* to the Opalite SSC
+*/
+class DtaDevOpalite : public DtaDevOpal {
+public:
+	DtaDevOpalite(const char * devref);
+	~DtaDevOpalite();
+        /** return the communication ID to be used with this device */
+	uint16_t comID();
+};

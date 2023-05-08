@@ -1,7 +1,7 @@
 /* C:B**************************************************************************
-This software is Copyright 2016 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
 This software is Copyright 2014-2016 Bright Plaza Inc. <drivetrust@drivetrust.com>
-This software is Copyright 2017 Spectra Logic Corporation
+This software is Copyright 2017-2023 Spectra Logic Corporation
 
 This file is part of sedutil.
 
@@ -22,6 +22,8 @@ along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
 #include "os.h"
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <dirent.h>
+#include <fnmatch.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
@@ -39,7 +41,7 @@ along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
 #include "DtaDevOS.h"
 #include "DtaHexDump.h"
 #include "DtaDevFreeBSDNvme.h"
-#include "DtaDevFreeBSDSata.h"
+#include "DtaDevFreeBSDCAM.h"
 #include "DtaDevGeneric.h"
 
 using namespace std;
@@ -66,19 +68,16 @@ void DtaDevOS::init(const char * devref)
 	dev = devref;
 
 	/*
-	 * Although the class names seem to indicate NVMe and SATA, in
-	 * reality the NVMe class is for the non-CAM interface to the Nvme
-	 * stack, and the Sata class is for the CAM interface to SATA, SAS
+	 * The NVMe class is for the non-CAM interface to the Nvme
+	 * stack, and the CAM class is for the CAM interface to SATA, SAS
 	 * and NVMe drives.  Using the CAM interface as the catchall allows
 	 * the user to specify any device name that cam(3) will recognize.
 	 * e.g. "da42", "pass4", "/dev/ada0", "nda3" and so on.
 	 */
 	if (!strncmp(devref, "/dev/nvme", 9) || !strncmp(devref, "/dev/nvd", 8))
-	{
 		drive = new DtaDevFreeBSDNvme();
-	} else {
-		drive = new DtaDevFreeBSDSata();
-	}
+	else
+		drive = new DtaDevFreeBSDCAM();
 
 	if (drive->init(devref)) {
 		isOpen = TRUE;
@@ -98,8 +97,7 @@ uint8_t DtaDevOS::sendCmd(ATACOMMAND cmd, uint8_t protocol, uint16_t comID,
 {
 	if (!isOpen) return 0xfe; //disk open failed so this will too
 
-	if (NULL == drive)
-	{
+	if (NULL == drive) {
 		LOG(E) << "DtaDevOS::sendCmd ERROR - unknown drive type";
 		return FAIL;
 	}
@@ -110,8 +108,7 @@ uint8_t DtaDevOS::sendCmd(ATACOMMAND cmd, uint8_t protocol, uint16_t comID,
 void DtaDevOS::identify(OPAL_DiskInfo& disk_info)
 {
 	if (!isOpen) return; //disk open failed so this will too
-	if (NULL == drive)
-	{
+	if (NULL == drive) {
 		LOG(E) << "DtaDevOS::identify ERROR - unknown disk type";
 		return;
 	}
@@ -124,6 +121,7 @@ void DtaDevOS::osmsSleep(uint32_t ms)
 	usleep(ms * 1000); //convert to microseconds
 	return;
 }
+
 void DtaDevOS::getDevStr(struct device_match_result *dev_result,
 			 char *devstr, size_t devstr_len, uint8_t alt_output)
 {
@@ -221,6 +219,30 @@ void DtaDevOS::getDevStr(struct device_match_result *dev_result,
 		sprintf(tmpstr, "<%s %s %s %s>", vendor, product, revision, fw);
 		break;
 	}
+
+	case PROTO_NVME: {
+		struct cam_device *dev;
+		struct nvme_controller_data cdata;
+
+		dev = cam_open_btl(dev_result->path_id, dev_result->target_id,
+			dev_result->target_lun, O_RDWR, NULL);
+		if (dev == NULL) {
+			sprintf(tmpstr, "<>");
+			break;
+		}
+
+		bzero(&cdata, sizeof(cdata));
+		if (nvme_get_cdata(dev, &cdata) == 0) {
+			cam_strvis(vendor, cdata.mn, sizeof(cdata.mn), sizeof(vendor));
+			cam_strvis(product, cdata.fr, sizeof(cdata.fr), sizeof(product));
+			sprintf(tmpstr, "<%s %s>", vendor, product);
+		} else {
+			sprintf(tmpstr, "<>");
+		}
+		cam_close_device(dev);
+		break;
+	}
+
 	default:
 		sprintf(tmpstr, "<>");
 		break;

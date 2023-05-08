@@ -1,5 +1,5 @@
 /* C:B**************************************************************************
-This software is Copyright 2016 Alexander Motin <mav@FreeBSD.org>
+This software is Copyright 2016-2018 Alexander Motin <mav@FreeBSD.org>
 
 This file is part of sedutil.
 
@@ -64,3 +64,6 @@ private:
 		char *devstr, size_t devstr_len, uint8_t alt_output);
     DtaDevFreeBSDDrive *drive;
 };
+
+extern int nvme_get_cdata(struct cam_device *dev, struct nvme_controller_data *cdata);
+

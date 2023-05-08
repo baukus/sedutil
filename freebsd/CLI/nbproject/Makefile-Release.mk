@@ -43,6 +43,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpal.o \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpal1.o \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpal2.o \
+	${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpalite.o \
+	${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite1.o \
+	${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite2.o \
+	${OBJECTDIR}/_ext/7a2a93ab/DtaDevRuby1.o \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaHashPwd.o \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaHexDump.o \
 	${OBJECTDIR}/_ext/7a2a93ab/DtaOptions.o \
@@ -54,8 +58,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/cdbdd37b/pbkdf2.o \
 	${OBJECTDIR}/_ext/cdbdd37b/sha1.o \
 	${OBJECTDIR}/_ext/7a2a93ab/sedutil.o \
+	${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDCAM.o \
 	${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDNvme.o \
-	${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDSata.o \
 	${OBJECTDIR}/_ext/5c0/DtaDevOS.o
 
 
@@ -123,6 +127,26 @@ ${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpal2.o: ../../Common/DtaDevOpal2.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpal2.o ../../Common/DtaDevOpal2.cpp
 
+${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpalite.o: ../../Common/DtaDevOpalite.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/7a2a93ab
+	${RM} "$@.d"
+	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/DtaDevOpalite.o ../../Common/DtaDevOpalite.cpp
+
+${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite1.o: ../../Common/DtaDevPyrite1.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/7a2a93ab
+	${RM} "$@.d"
+	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite1.o ../../Common/DtaDevPyrite1.cpp
+
+${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite2.o: ../../Common/DtaDevPyrite2.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/7a2a93ab
+	${RM} "$@.d"
+	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/DtaDevPyrite2.o ../../Common/DtaDevPyrite2.cpp
+
+${OBJECTDIR}/_ext/7a2a93ab/DtaDevRuby1.o: ../../Common/DtaDevRuby1.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/7a2a93ab
+	${RM} "$@.d"
+	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/DtaDevRuby1.o ../../Common/DtaDevRuby1.cpp
+
 ${OBJECTDIR}/_ext/7a2a93ab/DtaHashPwd.o: ../../Common/DtaHashPwd.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/7a2a93ab
 	${RM} "$@.d"
@@ -178,15 +202,15 @@ ${OBJECTDIR}/_ext/7a2a93ab/sedutil.o: ../../Common/sedutil.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/7a2a93ab/sedutil.o ../../Common/sedutil.cpp
 
+${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDCAM.o: ../DtaDevFreeBSDCAM.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/5c0
+	${RM} "$@.d"
+	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDCAM.o ../DtaDevFreeBSDCAM.cpp
+
 ${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDNvme.o: ../DtaDevFreeBSDNvme.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/5c0
 	${RM} "$@.d"
 	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDNvme.o ../DtaDevFreeBSDNvme.cpp
-
-${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDSata.o: ../DtaDevFreeBSDSata.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/5c0
-	${RM} "$@.d"
-	$(COMPILE.cc) -Werror -I.. -I../../Common -I../../Common/pbkdf2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5c0/DtaDevFreeBSDSata.o ../DtaDevFreeBSDSata.cpp
 
 ${OBJECTDIR}/_ext/5c0/DtaDevOS.o: ../DtaDevOS.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/5c0
