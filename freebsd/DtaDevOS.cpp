@@ -22,8 +22,6 @@ along with sedutil.  If not, see <http://www.gnu.org/licenses/>.
 #include "os.h"
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <dirent.h>
-#include <fnmatch.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
